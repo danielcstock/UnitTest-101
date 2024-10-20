@@ -1,2 +1,4 @@
-./OrderService/obj/*
-./Tests/obj/*
+OrderService/obj/*
+OrderService/bin/*
+Tests/obj/*
+Tests/bin/*
