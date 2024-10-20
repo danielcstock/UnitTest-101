@@ -1,5 +1,4 @@
-OrderService/obj/*
-OrderService/bin/*
+Model/obj/*
 Tests/obj/*
 Tests/bin/*
 API/obj/*
