@@ -1,4 +1,7 @@
 OrderService/obj/*
+OrderService/obj/Debug/*
 OrderService/bin/*
 Tests/obj/*
 Tests/bin/*
+API/obj/*
+API/bin/*
