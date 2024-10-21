@@ -18,12 +18,25 @@ public class Order
             "daniel.stock@bravium.com.br"
         );
 
+        var orderItemA = new OrderItem(
+            "Bonsai mini",
+            49.90M,
+            1
+        );
+
+        var orderItemB = new OrderItem(
+            "Mouse",
+            99.90M,
+            2
+        );
+
         Id = 1;
         Date = DateTime.Now;
         Status = 1;
         Buyer = customer;
         Items = new List<OrderItem>(){
-            new OrderItem()
+            orderItemA,
+            orderItemB
         };
     }
 

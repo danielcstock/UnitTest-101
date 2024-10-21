@@ -9,11 +9,11 @@ public class OrderItem
     public decimal Price {get;set;}
     public decimal Quantity {get;set;}
 
-    public OrderItem(){
+    public OrderItem(string description, decimal price, decimal quantity){
         Id = 1;
-        Description = "Bonsai mini";
-        Price = 49.90M;
-        Quantity = 1;
+        Description = description;
+        Price = price;
+        Quantity = quantity;
     }
 
     public static async Task<IList<OrderItem>> GetAllItemsFromOrder(int id, Context db){
