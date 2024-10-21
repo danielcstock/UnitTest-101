@@ -39,12 +39,6 @@ public class Customer
         return await db.Customers.ToArrayAsync();
     }
 
-    public static async Task<IList<Customer>> GetCompleteCustomers(Context db){
-        return await db.Customers
-            // .Where(customer => customer.Status == 3)k
-            .ToArrayAsync();
-    }
-
     public static async Task<Customer> GetCustomer(int id, Context db){
         return await db.Customers.FindAsync(id)
             is Customer customer
