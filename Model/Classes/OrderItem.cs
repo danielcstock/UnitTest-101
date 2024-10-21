@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 public class OrderItem
 {
     public int Id {get;set;}
+    public int OrderId {get;set;}
     public string Description {get;set;}
     public decimal Price {get;set;}
     public decimal Quantity {get;set;}
@@ -16,8 +17,10 @@ public class OrderItem
         Quantity = quantity;
     }
 
-    public static async Task<IList<OrderItem>> GetAllItemsFromOrder(int id, Context db){
-        return await db.OrderItems.ToArrayAsync();
+    public static async Task<IList<OrderItem>> GetAllItemsFromOrder(int orderId, Context db){
+        return await db.OrderItems
+            .Where(item => item.OrderId == orderId)
+            .ToArrayAsync();
     }
 
     public static async Task<IList<OrderItem>> GetOrderItem(int id, Context db){
