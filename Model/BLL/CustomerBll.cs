@@ -57,6 +57,12 @@ public class CustomerBll
     }
 
     public static async Task DeleteCustomer(int id, Context db){
+        var orders = await OrderBll.GetAllOrdersByCustomerId(id, db);
+
+        if(orders.Any()){
+            throw new Exception("Cannot delete customer. This customer is associated with one or more orders.");
+        }
+
         if (await db.Customers.FindAsync(id) is Customer customer)
         {
             db.Customers.Remove(customer);
