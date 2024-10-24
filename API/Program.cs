@@ -1,6 +1,7 @@
 using NSwag.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Model.Classes;
+using Model.BLL;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<Context>(opt => opt.UseInMemoryDatabase("OrderService"));
@@ -29,18 +30,18 @@ if (app.Environment.IsDevelopment())
 
 var orderRequests = app.MapGroup("/orders");
 
-orderRequests.MapGet("/", Order.GetAllOrders);
-orderRequests.MapGet("/complete", Order.GetCompleteOrders);
-orderRequests.MapGet("/{id}", Order.GetOrder);
-orderRequests.MapPost("/", Order.CreateOrder);
-orderRequests.MapPut("/{id}", Order.UpdateOrder);
-orderRequests.MapDelete("/{id}", Order.DeleteOrder);
+// orderRequests.MapGet("/", OrderBll.GetAllOrders);
+// orderRequests.MapGet("/complete", OrderBll.GetCompleteOrders);
+orderRequests.MapGet("/{id}", OrderBll.GetOrder);
+orderRequests.MapPost("/", OrderBll.CreateOrder);
+// orderRequests.MapPut("/{id}", OrderBll.UpdateOrder);
+// orderRequests.MapDelete("/{id}", OrderBll.DeleteOrder);
 
 var customerRequests = app.MapGroup("/customers");
-customerRequests.MapGet("/", Customer.GetAllCustomers);
-customerRequests.MapGet("/{id}", Customer.GetCustomer);
-customerRequests.MapPost("/", Customer.CreateCustomer);
-customerRequests.MapPut("/{id}", Customer.UpdateCustomer);
-customerRequests.MapDelete("/{id}", Customer.DeleteCustomer);
+// customerRequests.MapGet("/", CustomerBll.GetAllCustomers);
+customerRequests.MapGet("/{id}", CustomerBll.GetCustomer);
+customerRequests.MapPost("/", CustomerBll.CreateCustomer);
+// customerRequests.MapPut("/{id}", CustomerBll.UpdateCustomer);
+customerRequests.MapDelete("/{id}", CustomerBll.DeleteCustomer);
 
 app.Run();
