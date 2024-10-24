@@ -4,8 +4,8 @@ namespace Tests;
 public class OrderBllTest
 {
     [TestMethod]
-    public void TestMethod1()
+    public async Task CreateOrder_WithNonExistentCustomer_ShouldFailValidation()
     {
-        Assert.AreEqual(1, 1);
+        Assert.AreEqual(0, 1);
     }
 }
