@@ -6,7 +6,7 @@ This repository contains a small project designed to demonstrate the fundamental
 
 1. Clone the repository:
 ``` bash
-git clone https://github.com/your-username/unit-testing-project.git
+git clone https://github.com/danielcstock/UnitTest-101
 ```
 
 2. Navigate to the project directory:
