@@ -1,6 +1,7 @@
 namespace Tests;
 
 using Microsoft.EntityFrameworkCore;
+using Faker;
 using Model.BLL;
 using Model.Classes;
 
@@ -10,7 +11,7 @@ public class CustomerBllTest
     [TestMethod]
     public async Task CreateCustomer_WithValidParameters_Should_Succeed()
     {
-        Assert.AreEqual(0, 1);
+        Assert.AreEqual(0,1);
     }
 
     [TestMethod]
