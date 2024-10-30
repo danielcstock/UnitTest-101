@@ -3,14 +3,16 @@ namespace Model.BLL;
 using Microsoft.EntityFrameworkCore;
 using Model.Classes;
 
-public class OrderBll
+public class OrderBll(IApplicationDbContext context)
 {
-    public static async Task<IList<Order>> GetAllOrders(Context db){
-        return await db.Orders.ToArrayAsync();
+    private readonly IApplicationDbContext _context = context;
+
+    public async Task<IList<Order>> GetAllOrders(){
+        return await _context.Orders.ToArrayAsync();
     }
 
-    public static async Task<Order> GetOrder(int id, Context db){
-        var order = await db.Orders.FindAsync(id)
+    public async Task<Order> GetOrder(int id){
+        var order = await _context.Orders.FindAsync(id)
             is Order o
                 ? o
                 : null;
@@ -19,20 +21,21 @@ public class OrderBll
             throw new Exception("Order not found!");
         }
 
-        var orderItemBll = new OrderItemBll();
-        order.Items = await OrderItemBll.GetAllItemsFromOrder(order.Id, db);
+        var orderItemBll = new OrderItemBll(_context);
+        order.Items = await orderItemBll.GetAllItemsFromOrder(order.Id);
 
         return order;
     }
 
-    public static async Task<IList<Order>> GetAllOrdersByCustomerId(int customerId, Context db){
-        return await db.Orders
+    public async Task<IList<Order>> GetAllOrdersByCustomerId(int customerId){
+        return await _context.Orders
             .Where(order => order.CustomerId == customerId)
             .ToArrayAsync();
     }
     
-    public static async Task<Order> CreateOrder(Order order, Context db){
-        var customer = await CustomerBll.GetCustomer(order.CustomerId, db)
+    public async Task<Order> CreateOrder(Order order){
+        var customerService = new CustomerBll(_context);
+        var customer = await customerService.GetCustomer(order.CustomerId)
             is Customer c
                 ? c
                 : null;
@@ -41,18 +44,18 @@ public class OrderBll
             throw new Exception("Customer not found!");
         }
 
-        db.Orders.Add(order);
-        db.OrderItems.AddRange(order.Items);
-        await db.SaveChangesAsync();
+        _context.Orders.Add(order);
+        _context.OrderItems.AddRange(order.Items);
+        await _context.Instance.SaveChangesAsync();
 
         return order;
     }
 
-    public static async Task DeleteOrder(int id, Context db){
-        if (await db.Orders.FindAsync(id) is Order order)
+    public async Task DeleteOrder(int id){
+        if (await _context.Orders.FindAsync(id) is Order order)
         {
-            db.Orders.Remove(order);
-            await db.SaveChangesAsync();
+            _context.Orders.Remove(order);
+            await _context.Instance.SaveChangesAsync();
         }
     }
 }

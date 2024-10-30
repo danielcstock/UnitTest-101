@@ -1,11 +1,14 @@
 using NSwag.AspNetCore;
 using Microsoft.EntityFrameworkCore;
-using Model.Classes;
 using Model.BLL;
+using Model.Classes;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<Context>(opt => opt.UseInMemoryDatabase("OrderService"));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddSingleton<OrderBll>();
+builder.Services.AddSingleton<CustomerBll>();
+builder.Services.AddSingleton<OrderItemBll>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApiDocument(config =>
@@ -29,19 +32,22 @@ if (app.Environment.IsDevelopment())
 }
 
 var orderRequests = app.MapGroup("/orders");
+var orderBll = new OrderBll(null);
 
-// orderRequests.MapGet("/", OrderBll.GetAllOrders);
-// orderRequests.MapGet("/complete", OrderBll.GetCompleteOrders);
-orderRequests.MapGet("/{id}", OrderBll.GetOrder);
-orderRequests.MapPost("/", OrderBll.CreateOrder);
-// orderRequests.MapPut("/{id}", OrderBll.UpdateOrder);
-// orderRequests.MapDelete("/{id}", OrderBll.DeleteOrder);
+orderRequests.MapGet("/{id}", async (int id) => {
+    return await orderBll.GetOrder(id);
+});
+orderRequests.MapPost("/", orderBll.CreateOrder);
 
 var customerRequests = app.MapGroup("/customers");
-// customerRequests.MapGet("/", CustomerBll.GetAllCustomers);
-customerRequests.MapGet("/{id}", CustomerBll.GetCustomer);
-customerRequests.MapPost("/", CustomerBll.CreateCustomer);
-// customerRequests.MapPut("/{id}", CustomerBll.UpdateCustomer);
-customerRequests.MapDelete("/{id}", CustomerBll.DeleteCustomer);
+var customerBll = new CustomerBll(null);
+
+customerRequests.MapGet("/{id}", async (int id) => {
+    return await customerBll.GetCustomer(id);
+});
+customerRequests.MapPost("/", customerBll.CreateCustomer);
+customerRequests.MapDelete("/{id}", async (int id) => {
+    await customerBll.DeleteCustomer(id);
+});
 
 app.Run();

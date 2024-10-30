@@ -3,20 +3,22 @@ namespace Model.BLL;
 using Microsoft.EntityFrameworkCore;
 using Model.Classes;
 
-public class CustomerBll
+public class CustomerBll(IApplicationDbContext context)
 {
-    public static async Task<IList<Customer>> GetAllCustomers(Context db){
-        return await db.Customers.ToArrayAsync();
+    private readonly IApplicationDbContext _context = context;
+
+    public async Task<IList<Customer>> GetAllCustomers(){
+        return await _context.Customers.ToArrayAsync();
     }
 
-    public static async Task<Customer> GetCustomer(int id, Context db){
-        return await db.Customers.FindAsync(id)
+    public async Task<Customer?> GetCustomer(int id){
+        return await _context.Customers.FindAsync(id)
             is Customer customer
                 ? customer
                 : null;
     }
 
-    public static async Task<Customer> CreateCustomer(Customer customer, Context db){
+    public async Task<Customer> CreateCustomer(Customer customer){
         if(customer.Id <= 0){
             throw new ArgumentException("Invalid customer ID!");
         }
@@ -37,14 +39,14 @@ public class CustomerBll
             throw new ArgumentException("Invalid customer e-mail!");
         };
 
-        db.Customers.Add(customer);
-        await db.SaveChangesAsync();
+        _context.Customers.Add(customer);
+        await _context.Instance.SaveChangesAsync();
 
         return customer;
     }
 
-    public static async Task UpdateCustomer(int id, Customer inputCustomer, Context db){
-        var customer = await db.Customers.FindAsync(id);
+    public async Task UpdateCustomer(int id, Customer inputCustomer){
+        var customer = await _context.Customers.FindAsync(id);
 
         if (customer is not null) {
             customer.Name = inputCustomer.Name;
@@ -52,21 +54,22 @@ public class CustomerBll
             customer.Address = inputCustomer.Address;
             customer.Email = inputCustomer.Email;
 
-            await db.SaveChangesAsync(); 
+            await _context.Instance.SaveChangesAsync(); 
         }
     }
 
-    public static async Task DeleteCustomer(int id, Context db){
-        var orders = await OrderBll.GetAllOrdersByCustomerId(id, db);
+    public async Task DeleteCustomer(int id){
+        var orderBll = new OrderBll(_context);
+        var orders = await orderBll.GetAllOrdersByCustomerId(id);
 
         if(orders.Any()){
             throw new Exception("Cannot delete customer. This customer is associated with one or more orders.");
         }
 
-        if (await db.Customers.FindAsync(id) is Customer customer)
+        if (await _context.Customers.FindAsync(id) is Customer customer)
         {
-            db.Customers.Remove(customer);
-            await db.SaveChangesAsync();
+            _context.Customers.Remove(customer);
+            await _context.Instance.SaveChangesAsync();
         }
     }
 

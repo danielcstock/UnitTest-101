@@ -3,42 +3,43 @@ namespace Model.BLL;
 using Microsoft.EntityFrameworkCore;
 using Model.Classes;
 
-public class OrderItemBll
+public class OrderItemBll(IApplicationDbContext context)
 {
-    public static async Task<IList<OrderItem>> GetAllItemsFromOrder(int orderId, Context db){
-        return await db.OrderItems
+    private readonly IApplicationDbContext _context = context;
+    public async Task<IList<OrderItem>> GetAllItemsFromOrder(int orderId){
+        return await _context.OrderItems
             .Where(item => item.OrderId == orderId)
             .ToArrayAsync();
     }
 
-    public static async Task<IList<OrderItem>> GetOrderItem(int id, Context db){
-        return await db.OrderItems
+    public async Task<IList<OrderItem>> GetOrderItem(int id){
+        return await _context.OrderItems
             // .Where(OrderItem => OrderItem.Status == 3)k
             .ToArrayAsync();
     }
 
-    public static async Task<OrderItem> CreateOrderItem(OrderItem orderItem, Context db){
-        db.OrderItems.Add(orderItem);
-        await db.SaveChangesAsync();
+    public async Task<OrderItem> CreateOrderItem(OrderItem orderItem){
+        _context.OrderItems.Add(orderItem);
+        await _context.Instance.SaveChangesAsync();
 
         return orderItem;
     }
 
-    public static async Task UpdateOrderItem(int id, OrderItem inputOrderItem, Context db){
-        var OrderItem = await db.OrderItems.FindAsync(id);
+    public async Task UpdateOrderItem(int id, OrderItem inputOrderItem){
+        var OrderItem = await _context.OrderItems.FindAsync(id);
 
         // if (OrderItem is not null) {
         //     OrderItem.Buyer.Name = inputOrderItem.Buyer.Name;
         //     OrderItem.Status = inputOrderItem.Status;
 
-            await db.SaveChangesAsync(); 
+            await _context.Instance.SaveChangesAsync(); 
     }
 
-    public static async Task DeleteOrderItem(int id, Context db){
-        if (await db.OrderItems.FindAsync(id) is OrderItem orderItem)
+    public async Task DeleteOrderItem(int id){
+        if (await _context.OrderItems.FindAsync(id) is OrderItem orderItem)
         {
-            db.OrderItems.Remove(orderItem);
-            await db.SaveChangesAsync();
+            _context.OrderItems.Remove(orderItem);
+            await _context.Instance.SaveChangesAsync();
         }
     }
 }
