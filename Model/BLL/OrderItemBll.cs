@@ -14,7 +14,6 @@ public class OrderItemBll(IApplicationDbContext context)
 
     public async Task<IList<OrderItem>> GetOrderItem(int id){
         return await _context.OrderItems
-            // .Where(OrderItem => OrderItem.Status == 3)k
             .ToArrayAsync();
     }
 
@@ -23,16 +22,6 @@ public class OrderItemBll(IApplicationDbContext context)
         await _context.Instance.SaveChangesAsync();
 
         return orderItem;
-    }
-
-    public async Task UpdateOrderItem(int id, OrderItem inputOrderItem){
-        var OrderItem = await _context.OrderItems.FindAsync(id);
-
-        // if (OrderItem is not null) {
-        //     OrderItem.Buyer.Name = inputOrderItem.Buyer.Name;
-        //     OrderItem.Status = inputOrderItem.Status;
-
-            await _context.Instance.SaveChangesAsync(); 
     }
 
     public async Task DeleteOrderItem(int id){

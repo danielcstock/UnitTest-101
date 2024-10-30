@@ -1,7 +1,5 @@
-using NSwag.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Model.BLL;
-using Model.Classes;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<Context>(opt => opt.UseInMemoryDatabase("OrderService"));
