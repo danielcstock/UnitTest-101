@@ -6,9 +6,6 @@ using Model.Classes;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<Context>(opt => opt.UseInMemoryDatabase("OrderService"));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddSingleton<OrderBll>();
-builder.Services.AddSingleton<CustomerBll>();
-builder.Services.AddSingleton<OrderItemBll>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApiDocument(config =>
