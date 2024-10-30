@@ -28,7 +28,7 @@ public class OrderBll(IApplicationDbContext context)
     }
 
     public async Task<IList<Order>> GetAllOrdersByCustomerId(int customerId){
-        return await _context.Orders
+        return await ((Context)(_context.Instance)).Orders
             .Where(order => order.CustomerId == customerId)
             .ToArrayAsync();
     }

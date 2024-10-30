@@ -66,9 +66,9 @@ public class CustomerBll(IApplicationDbContext context)
             throw new InvalidOperationException("Cannot delete customer. This customer is associated with one or more orders.");
         }
 
-        if (await _context.Customers.FindAsync(id) is Customer customer)
+        if (await ((Context)(_context.Instance)).Customers.FindAsync(id) is Customer customer)
         {
-            _context.Customers.Remove(customer);
+            ((Context)(_context.Instance)).Customers.Remove(customer);
             await _context.Instance.SaveChangesAsync();
         }
     }

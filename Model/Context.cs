@@ -7,9 +7,9 @@ public class Context : DbContext, IApplicationDbContext
         : base(options) { }
 
     public DbContext Instance => this;
-    // public DbSet<Order> Orders => Set<Order>();
-    // public DbSet<OrderItem> OrderItems => Set<OrderItem>();
-    // public DbSet<Customer> Customers => Set<Customer>();
+    public DbSet<Order> Orders => Set<Order>();
+    public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+    public DbSet<Customer> Customers => Set<Customer>();
 
     DbSet<Order> IApplicationDbContext.Orders {get => throw new NotImplementedException(); set => Set<Order>();}
     DbSet<OrderItem> IApplicationDbContext.OrderItems { get => throw new NotImplementedException(); set => Set<OrderItem>(); }
