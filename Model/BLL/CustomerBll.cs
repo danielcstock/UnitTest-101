@@ -39,7 +39,7 @@ public class CustomerBll(IApplicationDbContext context)
             throw new ArgumentException("Invalid customer e-mail!");
         };
 
-        _context.Customers.Add(customer);
+        _context.Instance.Add(customer);
         await _context.Instance.SaveChangesAsync();
 
         return customer;
@@ -63,7 +63,7 @@ public class CustomerBll(IApplicationDbContext context)
         var orders = await orderBll.GetAllOrdersByCustomerId(id);
 
         if(orders.Any()){
-            throw new Exception("Cannot delete customer. This customer is associated with one or more orders.");
+            throw new InvalidOperationException("Cannot delete customer. This customer is associated with one or more orders.");
         }
 
         if (await _context.Customers.FindAsync(id) is Customer customer)
