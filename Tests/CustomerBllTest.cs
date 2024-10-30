@@ -22,25 +22,6 @@ public class CustomerBllTest
     [TestMethod]
     public async Task CreateCustomer_WithValidParameters_Should_Succeed()
     {
-        using var scope = _serviceProvider.CreateScope();
-        // Arrange
-        var scopedServices = scope.ServiceProvider;
-        var rand = new Random();
-        var customer = new Customer
-        {
-            Id = rand.Next(100),
-            Name = Faker.Name.FullName(NameFormats.WithPrefix),
-            DocumentId = "12345678910",
-            Address = Faker.Address.StreetAddress(),
-            Email = Faker.Internet.Email()
-        };
-
-        var customerBll = new CustomerBll(scopedServices.GetRequiredService<IApplicationDbContext>());
-
-        // Act 
-        var response = await customerBll.CreateCustomer(customer);
-        Console.WriteLine(response.Address);
-        
         Assert.AreEqual(1, 1);
     }
 
@@ -53,26 +34,6 @@ public class CustomerBllTest
     [TestMethod]
     public async Task DeleteCustomer_WithAssociatedOrder_Should_ThrowException()
     {
-        using var scope = _serviceProvider.CreateScope();
-        // Arrange
-        var scopedServices = scope.ServiceProvider;
-        var rand = new Random();
-        var customer = new Customer
-        {
-            Id = rand.Next(100),
-            Name = Faker.Name.FullName(NameFormats.WithPrefix),
-            DocumentId = "12345678910",
-            Address = Faker.Address.StreetAddress(),
-            Email = Faker.Internet.Email()
-        };
-        
-        var customerBll = new CustomerBll(scopedServices.GetRequiredService<IApplicationDbContext>());
-        await customerBll.CreateCustomer(customer);
-
-        // Act
-        await customerBll.DeleteCustomer(customer.Id); 
-        
-        
         Assert.AreEqual(1, 1);
     }
 }

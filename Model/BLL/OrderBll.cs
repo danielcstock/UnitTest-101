@@ -34,18 +34,7 @@ public class OrderBll(IApplicationDbContext context)
     }
     
     public async Task<Order> CreateOrder(Order order){
-        var customerService = new CustomerBll(_context);
-        var customer = await customerService.GetCustomer(order.CustomerId)
-            is Customer c
-                ? c
-                : null;
-
-        if(customer is null){
-            throw new Exception("Customer not found!");
-        }
-
-        _context.Orders.Add(order);
-        _context.OrderItems.AddRange(order.Items);
+        ((Context)_context.Instance).Orders.Add(order);
         await _context.Instance.SaveChangesAsync();
 
         return order;
