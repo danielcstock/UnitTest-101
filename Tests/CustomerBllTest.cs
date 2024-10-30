@@ -10,15 +10,6 @@ using Model.Classes;
 [TestClass]
 public class CustomerBllTest
 {
-    private readonly ServiceProvider _serviceProvider;
-    public CustomerBllTest(){
-        var services = new ServiceCollection();
-        services.AddDbContext<IApplicationDbContext, Context>(
-            options => options.UseInMemoryDatabase("CustomerDbTest")
-        );
-        _serviceProvider = services.BuildServiceProvider();
-    }
-
     [TestMethod]
     public async Task CreateCustomer_WithValidParameters_Should_Succeed()
     {
