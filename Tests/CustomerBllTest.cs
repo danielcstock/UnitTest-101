@@ -1,12 +1,5 @@
 namespace Tests;
 
-using System;
-using Faker;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Model.BLL;
-using Model.Classes;
-
 [TestClass]
 public class CustomerBllTest
 {
